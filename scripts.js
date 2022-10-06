@@ -1,12 +1,6 @@
 //Array to store books
 
 let myLibrary = [
-    {
-        title: "Scotty",
-        author: "Ken Dryden",
-        pages: 400,
-        isRead: false
-    }
 ];
                                      
 //Dom Selectors
@@ -24,6 +18,16 @@ const $isReadInput = document.querySelector('#isRead')
 const $addButton = document.querySelector('#addButton')
 const $exitFormButton = document.querySelector('#exitForm')
 
+
+const card = document.createElement('div')
+const title = document.createElement('h3')
+const author = document.createElement('p')
+const pages = document.createElement('p')
+const btnGroup = document.createElement('div')
+const readBtn = document.createElement('button')
+const removeBtn = document.createElement('button')
+
+
 $addButton.addEventListener('click', addBookToLibrary)
 
 $newBookButton.addEventListener('click', () => {
@@ -39,7 +43,7 @@ function Book(title, author, pages, isRead) {
 }
 
 //fucntion to add book to library based on user input
-function addBookToLibrary() {
+function addBookToLibrary(e) {
 
     let title=$titleInput.value
     let author=$authorInput.value
@@ -47,13 +51,37 @@ function addBookToLibrary() {
     let isRead=$isReadInput.checked
 
     let newBook = new Book(title, author, pages, isRead)
-    myLibrary.push(newBook)
+    myLibrary[myLibrary.length] = newBook
     displayLibrary()
     $newBookForm.style.display = 'none'
+    e.preventDefault()
 }
 
 function displayLibrary() {
     for (let i in myLibrary) {
-        console.log(myLibrary[i])
+        createBookCard(myLibrary[i])
     }
 }
+
+function createBookCard(book) {
+    
+    title.textContent = book.title
+    author.textContent = book.author
+    pages.textContent = `${book.pages} pages`
+    removeBtn.textContent = 'Remove'
+
+    if (book.isRead) {
+        readBtn.textContent = 'Read'
+    } else {
+        readBtn.textContent='Not Read'
+    }
+
+    card.appendChild(title)
+    card.appendChild(author)
+    card.appendChild(pages)
+    btnGroup.appendChild(readBtn)
+    btnGroup.appendChild(removeBtn)
+    card.appendChild(btnGroup)
+    $library.appendChild(card)
+}
+

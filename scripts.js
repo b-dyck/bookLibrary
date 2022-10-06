@@ -8,7 +8,7 @@ let myLibrary = [
         isRead: false
     }
 ];
-
+                                     
 //Dom Selectors
 
 const $library = document.querySelector('#library')
@@ -24,9 +24,11 @@ const $isReadInput = document.querySelector('#isRead')
 const $addButton = document.querySelector('#addButton')
 const $exitFormButton = document.querySelector('#exitForm')
 
-$addButton.addEventListener('click', addBookToLibrary())
+$addButton.addEventListener('click', addBookToLibrary)
 
-
+$newBookButton.addEventListener('click', () => {
+    $newBookForm.style.display = 'grid'
+})
 //Book constructor
 
 function Book(title, author, pages, isRead) {
@@ -42,11 +44,12 @@ function addBookToLibrary() {
     let title=$titleInput.value
     let author=$authorInput.value
     let pages=$pagesInput.value
-    let isRead=$isReadInput.value
+    let isRead=$isReadInput.checked
 
     let newBook = new Book(title, author, pages, isRead)
     myLibrary.push(newBook)
     displayLibrary()
+    $newBookForm.style.display = 'none'
 }
 
 function displayLibrary() {

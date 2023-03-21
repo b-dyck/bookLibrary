@@ -23,87 +23,93 @@ function Book(title, author, pages, isRead) {
     this.isRead = isRead;    
 }
 
-// Dom Selectors
-
-const $library = document.querySelector('#library')
 const $newBookButton = document.querySelector('#newBookButton')
-const $deleteBookButton = document.querySelector('#deleteBookButton')
-
-
-const $newBookForm = document.querySelector('#newBookForm')
 const $titleInput = document.querySelector('#title')
 const $authorInput = document.querySelector('#author')
 const $pagesInput = document.querySelector('#pages')
 const $isReadInput = document.querySelector('#isRead')
 const $addButton = document.querySelector('#addButton')
-const $exitFormButton = document.querySelector('#exitForm')
 
 
-const $card = document.createElement('div')
-const $title = document.createElement('h3')
-const $author = document.createElement('p')
-const $pages = document.createElement('p')
-const $btnGroup = document.createElement('div')
-const $readBtn = document.createElement('button')
-const $removeBtn = document.createElement('button')
+ // Functions to open and close the form for user input - currently not working
+function openForm() {
+    document.getElementById('newBookForm').style.display = 'block';
+}
 
-// Creates display for book by DOM manipulation. Appends book card to the Library div
-function createBookCard(book) {
+function closeForm() {
+    document.getElementById('newBookForm').style.display = 'none';
+}
+
+
+// Dom Selectors
+
+const $library = document.querySelector('#library')
+
+function displayBook(book, i) {
+        
+    const $card = document.createElement('div')
+    const $title = document.createElement('h3')
+    const $author = document.createElement('p')
+    const $pages = document.createElement('p')
+    const $btnGroup = document.createElement('div')
+    const $readBtn = document.createElement('button')
+    const $removeBtn = document.createElement('button')
+
+    $title.textContent = book.title;
+    $author.textContent = book.author;
+    $pages.textContent = `${book.pages} pages`;
     
-    $title.textContent = book.title
-    $author.textContent = book.author
-    $pages.textContent = `${book.pages} pages`
-    $removeBtn.textContent = 'Remove'
-
     if (book.isRead) {
-        $readBtn.textContent = 'Read'
-    } else {
-        $readBtn.textContent='Not Read'
+        $readBtn.textContent = "Read";
+    }   else {
+        $readBtn.textContent = "Not Read";
     }
-    // Sets id on remove button to allow for removal of DOM element and inout in library dataset
-    $removeBtn.classList.add = book.title
-    $card.classList.add = book.title
 
-    $card.appendChild($title)
-    $card.appendChild($author)
-    $card.appendChild($pages)
-    $btnGroup.appendChild($readBtn)
-    $btnGroup.appendChild($removeBtn)
+    $readBtn.addEventListener("click", () => {
+        myLibrary[i].isRead = !myLibrary[i].isRead
+        // eslint-disable-next-line no-use-before-define
+        displayEachBook();
+
+    })
+
+    $removeBtn.textContent = 'Remove'
+    $removeBtn.setAttribute('index', i)
+    $removeBtn.addEventListener("click", () => {
+        const {index} = $removeBtn;
+        myLibrary.splice(index, 1);
+        // eslint-disable-next-line no-use-before-define
+        displayEachBook();
+    })
+
+    $card.appendChild($title);
+    $card.appendChild($author);
+    $card.appendChild($pages);
+    $btnGroup.appendChild($readBtn);
+    $btnGroup.appendChild($removeBtn);
     $card.appendChild($btnGroup)
     $library.appendChild($card)
+    
 }
 
-// Loops through library dataset and creates DOM Element for each book in library div
-function displayLibrary() {
+function displayEachBook() {
+    $library.textContent = ''
     for (let i = 0; i < myLibrary.length; i += 1) {
-        createBookCard(myLibrary[i])
+        displayBook(myLibrary[i], i)
     }
 }
 
-// fucntion to add book to library dataset based on user input
-function addBookToLibrary() {
+function addBook(event) {
+    const newBook = new Book($titleInput.value, $authorInput.value, $pagesInput.value, $isReadInput.checked)
+    myLibrary.push(newBook);
+    closeForm();
+    displayEachBook();
+    event.preventDefault();
 
-    const bookTitle=$titleInput.value
-    const bookAuthor=$authorInput.value
-    const bookPages=$pagesInput.value
-    const bookIsRead=$isReadInput.checked
-
-    const newBook = new Book(bookTitle, bookAuthor, bookPages, bookIsRead)
-    myLibrary.push(newBook)
-    displayLibrary()
-    $newBookForm.style.display = 'none'
 }
 
-$addButton.addEventListener("click", addBookToLibrary)
+$newBookButton.addEventListener("click", openForm)
 
-$newBookButton.addEventListener("click", () => {
-    $newBookForm.style.display = 'block'
-});
+$addButton.addEventListener("click", addBook)
 
 
-function removeBook(index) {
-    $library.removeChild(document.querySelector(`div[data-index=${index}]`))
-    myLibrary.splice(index, 1)
-}
-
-displayLibrary();
+displayEachBook();

@@ -24,7 +24,6 @@ function Book(title, author, pages, isRead) {
 }
 
 const $newBookButton = document.querySelector('#newBookButton')
-const $newBookForm = document.querySelector('#newBookForm')
 const $titleInput = document.querySelector('#title')
 const $authorInput = document.querySelector('#author')
 const $pagesInput = document.querySelector('#pages')
@@ -41,11 +40,12 @@ function closeForm() {
     document.getElementById('newBookForm').style.display = 'none';
 }
 
+
 // Dom Selectors
 
 const $library = document.querySelector('#library')
 
-function displayBook(book) {
+function displayBook(book, i) {
         
     const $card = document.createElement('div')
     const $title = document.createElement('h3')
@@ -66,7 +66,14 @@ function displayBook(book) {
     }
 
     $removeBtn.textContent = 'Remove'
-    
+    $removeBtn.setAttribute('index', i)
+    $removeBtn.addEventListener("click", () => {
+        const index = $removeBtn.index;
+        myLibrary.splice(index, 1);
+        // eslint-disable-next-line no-use-before-define
+        displayEachBook();
+    })
+
     $card.appendChild($title);
     $card.appendChild($author);
     $card.appendChild($pages);
@@ -80,16 +87,13 @@ function displayBook(book) {
 function displayEachBook() {
     $library.textContent = ''
     for (let i = 0; i < myLibrary.length; i += 1) {
-        displayBook(myLibrary[i])
+        displayBook(myLibrary[i], i)
     }
-    console.log(myLibrary)
 }
-
 
 function addBook(event) {
     const newBook = new Book($titleInput.value, $authorInput.value, $pagesInput.value, $isReadInput.checked)
     myLibrary.push(newBook);
-    console.log(myLibrary)
     closeForm();
     displayEachBook();
     event.preventDefault();

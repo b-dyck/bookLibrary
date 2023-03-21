@@ -65,6 +65,16 @@ function displayBook(book, i) {
         $readBtn.textContent = "Not Read";
     }
 
+    $readBtn.addEventListener("click", () => {
+        const readStatus = $readBtn.textContent
+        if (readStatus === "Read") {
+            $readBtn.textContent = "Not Read"
+        }
+        else {
+            $readBtn.textContent = "Read"
+        }
+    })
+
     $removeBtn.textContent = 'Remove'
     $removeBtn.setAttribute('index', i)
     $removeBtn.addEventListener("click", () => {

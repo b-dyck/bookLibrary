@@ -94,11 +94,11 @@ function addBookToLibrary() {
     $newBookForm.style.display = 'none'
 }
 
-$addButton.addEventListener('click', addBookToLibrary())
+$addButton.addEventListener("click", addBookToLibrary)
 
-$newBookButton.addEventListener('click', () => {
-    $newBookForm.style.display = 'grid'
-})
+$newBookButton.addEventListener("click", () => {
+    $newBookForm.style.display = 'block'
+});
 
 
 function removeBook(index) {

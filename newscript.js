@@ -35,19 +35,18 @@ const $addButton = document.querySelector('#addButton')
  // Functions to open and close the form for user input - currently not working
 function openForm() {
     document.getElementById('newBookForm').style.display = 'block';
-    console.log("Form should open")
 }
 
 function closeForm() {
     document.getElementById('newBookForm').style.display = 'none';
 }
 
-$newBookButton.addEventListener('click', openForm())
+// Dom Selectors
+
+const $library = document.querySelector('#library')
 
 function displayBook(book) {
-    // Dom Selectors
-
-    const $library = document.querySelector('#library')
+        
     const $card = document.createElement('div')
     const $title = document.createElement('h3')
     const $author = document.createElement('p')
@@ -58,7 +57,7 @@ function displayBook(book) {
 
     $title.textContent = book.title;
     $author.textContent = book.author;
-    $pages.textContent = book.pages;
+    $pages.textContent = `${book.pages} pages`;
     
     if (book.isRead) {
         $readBtn.textContent = "Read";
@@ -66,20 +65,40 @@ function displayBook(book) {
         $readBtn.textContent = "Not Read";
     }
 
+    $removeBtn.textContent = 'Remove'
+    
     $card.appendChild($title);
     $card.appendChild($author);
     $card.appendChild($pages);
     $btnGroup.appendChild($readBtn);
     $btnGroup.appendChild($removeBtn);
+    $card.appendChild($btnGroup)
     $library.appendChild($card)
     
 }
 
 function displayEachBook() {
+    $library.textContent = ''
     for (let i = 0; i < myLibrary.length; i += 1) {
         displayBook(myLibrary[i])
     }
-    closeForm()
+    console.log(myLibrary)
 }
+
+
+function addBook(event) {
+    const newBook = new Book($titleInput.value, $authorInput.value, $pagesInput.value, $isReadInput.checked)
+    myLibrary.push(newBook);
+    console.log(myLibrary)
+    closeForm();
+    displayEachBook();
+    event.preventDefault();
+
+}
+
+$newBookButton.addEventListener("click", openForm)
+
+$addButton.addEventListener("click", addBook)
+
 
 displayEachBook();

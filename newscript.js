@@ -66,19 +66,16 @@ function displayBook(book, i) {
     }
 
     $readBtn.addEventListener("click", () => {
-        const readStatus = $readBtn.textContent
-        if (readStatus === "Read") {
-            $readBtn.textContent = "Not Read"
-        }
-        else {
-            $readBtn.textContent = "Read"
-        }
+        myLibrary[i].isRead = !myLibrary[i].isRead
+        // eslint-disable-next-line no-use-before-define
+        displayEachBook();
+
     })
 
     $removeBtn.textContent = 'Remove'
     $removeBtn.setAttribute('index', i)
     $removeBtn.addEventListener("click", () => {
-        const index = $removeBtn.index;
+        const {index} = $removeBtn;
         myLibrary.splice(index, 1);
         // eslint-disable-next-line no-use-before-define
         displayEachBook();
